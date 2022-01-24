@@ -16,6 +16,10 @@ services:
 
   backend:
     restart: always
+    environment:
+      - SECRET=ad1a8a1bee5062581d3a6a1a29697514
+      - PORT=3334
+      - DATABASE_URL=postgresql://docker:docker@db:5432/taskManager?schema=public
     build: backend/.
     ports:
       - 3334:3334
@@ -25,7 +29,7 @@ services:
       - db
     links:
       - db
-    command: "npx prisma migrate dev"
+    
 
   frontend:
     restart: always
