@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres
+
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=taskManager
+    volumes:
+      - pgdata:/data/postgres
+
+  backend:
+    restart: always
+    build: backend/.
+    ports:
+      - 3334:3334
+    volumes:
+      - .:/usr/app
+    depends_on:
+      - db
+    links:
+      - db
+    command: "npx prisma migrate dev"
+
+  frontend:
+    restart: always
+    build: frontend/.
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/app
+volumes:
+  pgdata:
+    driver: local
